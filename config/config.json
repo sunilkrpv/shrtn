@@ -1,0 +1,6 @@
+{
+    "uname": "test",
+    "pwd": "test",
+    "secret": "super.street.hawk.shhh",
+    "shortDomain": "http://localhost:3000/api/v1/shorten"
+}
