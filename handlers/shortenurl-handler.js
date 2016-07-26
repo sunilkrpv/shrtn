@@ -143,7 +143,32 @@ module.exports = {
                 res.send({'status': 'ERROR', 'message': 'INVALID_PARAMETERS'});
             }
         });
-    }
+
+    },
+
+    /**
+     * Deletes (soft delete) a shortUrl entry from the database
+     * since: v1.0
+     */
+    delete : function(shortUrl, req, res) {
+
+        var retValue = sanitizeURL(shortUrl);
+        if(!retValue.status) {
+            res.send(retValue.response);
+            next();
+        }
+
+        ShortenUrl.findOneAndRemove({"shortUrl": retValue.response.url}, function(err) {
+            if (err) {
+                console.log(err);
+                res.send({'status': 'FAILED', 'message': 'UNKNOWN_SERVER_ERROR'});
+            }
+            else {
+                res.send({'status': 'OK', 'message': 'DELETED'});
+            }
+        });
+
+    },
 
 };
 

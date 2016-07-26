@@ -45,17 +45,12 @@ module.exports = function(app, route) {
         handler.update(shortUrl, longUrl, req, res);
     });
 
-    /*
-    app.delete('/api/v1/currency', function(req, res) {
-        res.send({status: "fail", message: "Unsupported operation"});    
-        Currency.findByIdAndRemove(req.body.id, function(err) {
-            if (err) { 
-                throw err;
-            }
-            res.send('Success');
-        });
+    app.delete(route, function(req, res) {
+        
+        var shortUrl = req.body.shortUrl;
+        //var longUrl = req.body.longUrl;
+        handler.delete(shortUrl, req, res);
     });
-    */
     
 };
 
