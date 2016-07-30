@@ -4,6 +4,7 @@
  */
 
 var ShortenUrl = require('../models/Shorten');
+var RedirectStatsHandler = require('./redirectstats-handler');
 var bodyParser = require('body-parser');
 var shortid = require('shortid');
 var config = require('../config/index');
@@ -36,16 +37,9 @@ module.exports = {
                 throw err;
             }
 
-            //var doc = data !== null ? data._doc : null;
             if(data) {
-                console.log("curr hitCount: " + data.hitCount);
-                var count = data.hitCount + 1;
-                data.hitCount = count;
-                data.save(function(err) {
-                    if(err) {
-                        console.log('error while saving hitCount for id: ' + data._id);
-                    }
-                });
+                
+                RedirectStatsHandler.update(data, req.connection.remoteAddress);
                 redirectRequest(data.longUrl, req, res);
             }
             else {
@@ -187,10 +181,8 @@ var create = function(shortDomain, longUrl, req, res) {
         'shortDomain': shortDomain,
         'shortUrl': shortUrl,
         'longUrl': longUrl,
-        'token': token,
         'createdAt': now,
         'updatedAt': now,
-        'hitCount': 0,
         'requestCount': 1 // initialization, the very first request to shorten this URL
     });
 

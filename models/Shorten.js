@@ -35,11 +35,11 @@ var ShortenUrlSchema = new mongoose.Schema({
    requestCount: {
        type: Number,
        default:0,
-   },
+   }/*
    hitCount: {
        type: Number,
        default: 0
-   }
+   }*/
    
 });
 
