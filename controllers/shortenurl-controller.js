@@ -6,7 +6,6 @@
 
 
 // Dependencies
-var ShortenUrl = require('../models/Shorten');
 var bodyParser = require('body-parser');
 var handler = require('../handlers/shortenurl-handler');
 

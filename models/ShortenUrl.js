@@ -44,4 +44,4 @@ var ShortenUrlSchema = new mongoose.Schema({
 });
 
 // export this model
-module.exports = mongoose.model('ShortenUrls', ShortenUrlSchema);
+module.exports = mongoose.model('ShortenUrl', ShortenUrlSchema);

@@ -8,7 +8,7 @@
 // Dependencies - mongoose for Db schema
 var mongoose = require('mongoose');
 
-var RedirectStatsSchema = new mongoose.Schema({
+var RedirectStatSchema = new mongoose.Schema({
     _id: {
        type: String,
        required: true
@@ -42,4 +42,4 @@ var RedirectStatsSchema = new mongoose.Schema({
 });
 
 // export this model
-module.exports = mongoose.model('redirectStats', RedirectStatsSchema);
+module.exports = mongoose.model('redirectstat', RedirectStatSchema);

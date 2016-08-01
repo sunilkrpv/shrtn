@@ -4,7 +4,7 @@
  */
 
 
-var configValues = require('./config');
+var configuration = require('./config');
 
 module.exports = {
     
@@ -16,10 +16,14 @@ module.exports = {
     },
     
     getSecrethash: function() {
-        return configValues.secret;
+        return configuration.secret;
     },
 
     getShortDomain: function() {
-        return configValues.shortDomain;
+        return configuration.shortDomain;
+    },
+
+    uniqueShortUrls : function() {
+        return configuration.uniqueShortUrls;
     }
 };

@@ -3,11 +3,11 @@
  * Created by Sunil
  */
 
-var ShortenUrl = require('../models/Shorten');
-var RedirectStatsHandler = require('./redirectstats-handler');
 var bodyParser = require('body-parser');
 var shortid = require('shortid');
 var config = require('../config/index');
+var ShortenUrl = require('../models/ShortenUrl');
+var RedirectStatsHandler = require('./redirectstat-handler');
 
 module.exports = {
 
@@ -64,38 +64,46 @@ module.exports = {
             next();
         }
 
-        ShortenUrl.findOne({'shortDomain': retValue.response.shortDomainParam,'longUrl': retValue.response.longUrlParam}, 
-                function(err, data) {
+        if(config.uniqueShortUrls()) {
+            
+            ShortenUrl.findOne({'shortDomain': retValue.response.shortDomainParam,
+                                'longUrl': retValue.response.longUrlParam}, 
+                                function(err, data) {
 
-            if (err) {
-                console.log(err);
-                throw err;
-            }
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
 
-            var doc = data !== null ? data._doc : null;
-            if(doc) {
-                console.log("curr requestCount: " + doc.requestCount);
-                var count = doc.requestCount + 1;
+                var doc = data !== null ? data._doc : null;
+                if(doc) {
+                    console.log("curr requestCount: " + doc.requestCount);
+                    var count = doc.requestCount + 1;
 
-                data.requestCount = count;
-                data.save(function(err) {
-                    if(err) {
-                        console.log('error while saving requestCount for id: ' + doc._id);
-                    }
-                });
+                    data.requestCount = count;
+                    data.save(function(err) {
+                        if(err) {
+                            console.log('error while saving requestCount for id: ' + doc._id);
+                        }
+                    });
 
-                var retValue = {
-                    'shortUrl': doc.shortUrl,
-                    'requestCount': count,
-                    'status': 'OK',
-                    'message': 'ALREADY_EXISTS'
-                };
-                res.send(retValue);
-            }
-            else {
-                create(shortDomain, longUrl, req, res);
-            }
-        });
+                    var retValue = {
+                        'shortUrl': doc.shortUrl,
+                        'requestCount': count,
+                        'status': 'OK',
+                        'message': 'ALREADY_EXISTS'
+                    };
+                    res.send(retValue);
+                }
+                else {
+                    create(shortDomain, longUrl, req, res);
+                }
+            });
+        }
+        else {
+            // create short URLs for existing long URLs 
+            create(shortDomain, longUrl, req, res);
+        }
         
     },
 
@@ -176,7 +184,7 @@ var create = function(shortDomain, longUrl, req, res) {
     var now = new Date().toISOString();
     var token = shortid.generate();
     var shortUrl = shortDomain + '/' + token;
-    var shrtUrlData = ShortenUrl({
+    var shrtUrlObj = ShortenUrl({
         _id: token,
         'shortDomain': shortDomain,
         'shortUrl': shortUrl,
@@ -187,7 +195,7 @@ var create = function(shortDomain, longUrl, req, res) {
     });
 
 
-    shrtUrlData.save(function(err, doc) {
+    shrtUrlObj.save(function(err, data) {
         if (err) {
             console.log(err);
             var retValue1 = {
@@ -198,7 +206,8 @@ var create = function(shortDomain, longUrl, req, res) {
         }
         else {
             var retValue2 = {
-                'shortUrl': shortUrl,
+                'shortUrl': data.shortUrl,
+                'longUrl' : data.longUrl,
                 'status': 'OK'
             };
             res.send(retValue2);

@@ -4,5 +4,6 @@
 */
 
 module.exports = {
-    category: require('./Shorten')
+    shorten: require('./ShortenUrl'),
+    redirectstat: require('./RedirectStats')
 };

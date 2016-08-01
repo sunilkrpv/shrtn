@@ -1,9 +1,9 @@
 /**
- * Handler methods for updating the RedirectStats documents.
+ * Handler methods for updating the RedirectStat documents.
  * Created by Sunil
  */
 
-var RedirectStats = require('../models/RedirectStats');
+var RedirectStat = require('../models/RedirectStats');
 
 module.exports = {
 
@@ -11,6 +11,14 @@ module.exports = {
         
         update(shorten, req, res);
     },
+
+    getAll: function(req, res) {
+        RedirectStat.find(function(err, data) {
+            if (err)
+                res.send(err);
+            res.send(data);
+        });
+    }
 
 };
 
@@ -20,7 +28,7 @@ module.exports = {
  */
 var update = function(shorten, remoteIP) {
 
-    RedirectStats.findOne({_id: shorten._id}, function(err, data) {
+    RedirectStat.findOne({_id: shorten._id}, function(err, data) {
 
         if(err) {
             console.log(err);
@@ -30,7 +38,7 @@ var update = function(shorten, remoteIP) {
             var count = data.hitCount + 1;
             console.log(JSON.stringify(data));
 
-            RedirectStats.findByIdAndUpdate(
+            RedirectStat.findByIdAndUpdate(
                 shorten._id,
                 {$set: {'hitCount': count}, $push: {"hits": {'remoteIP': remoteIP, 'timestamp': new Date().toISOString()}}},
                 {safe: true, upsert: true},
@@ -52,7 +60,7 @@ var update = function(shorten, remoteIP) {
 };
 
 /**
- * Creates a new RedirectStats and updates Db.
+ * Creates a new RedirectStat and updates Db.
  * since: v1.0
  */
 var create = function(shorten, remoteIP) {
@@ -62,7 +70,7 @@ var create = function(shorten, remoteIP) {
         'timestamp': new Date().toISOString()
     };
 
-    var redirectStatData = RedirectStats({
+    var redirectStatData = RedirectStat({
         _id: shorten._id,
         'shortUrl': shorten.shortUrl,
         'longUrl': shorten.longUrl,
@@ -78,7 +86,7 @@ var create = function(shorten, remoteIP) {
             console.log(err);
         }
         else {
-            console.log('saved redirectStats entry for _id: ' + doc._id);
+            console.log('saved redirectStat entry for _id: ' + doc._id);
         }
     });
 };
