@@ -5,5 +5,6 @@
 
 module.exports = {
     shorten: require('./ShortenUrl'),
-    redirectstat: require('./RedirectStats')
+    redirectstat: require('./RedirectStats'),
+    token: require('./Token')
 };

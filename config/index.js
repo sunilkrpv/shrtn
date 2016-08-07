@@ -25,5 +25,9 @@ module.exports = {
 
     uniqueShortUrls : function() {
         return configuration.uniqueShortUrls;
+    },
+
+    authorizeAPIRequests : function() {
+        return configuration.authorizeAPIRequests;
     }
 };

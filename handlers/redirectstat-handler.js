@@ -28,20 +28,27 @@ module.exports = {
  */
 var update = function(shorten, remoteIP) {
 
-    RedirectStat.findOne({_id: shorten._id}, function(err, data) {
+    RedirectStat.findOne({ _id: shorten._id }, function(err, data) {
 
         if(err) {
             console.log(err);
+            throw err;
         }
 
         if(data) {
-            var count = data.hitCount + 1;
             console.log(JSON.stringify(data));
+            var totalCount = data.hitCount + 1;
 
             RedirectStat.findByIdAndUpdate(
                 shorten._id,
-                {$set: {'hitCount': count}, $push: {"hits": {'remoteIP': remoteIP, 'timestamp': new Date().toISOString()}}},
-                {safe: true, upsert: true},
+                {   
+                    $set: { 'hitCount': totalCount },
+                    $push: { 'hits' : { 'remoteIP': remoteIP, 'timestamp': new Date().toISOString()} }
+                },
+                {
+                    safe: true, 
+                    upsert: true
+                },
                 function(err, model) {
 
                     if(err) {
@@ -65,6 +72,7 @@ var update = function(shorten, remoteIP) {
  */
 var create = function(shorten, remoteIP) {
 
+    // build the remote client information
     var hit = {
         'remoteIP' : remoteIP,
         'timestamp': new Date().toISOString()

@@ -4,7 +4,11 @@
         "uname": "test",
         "pwd": "test"
     },
-    "secret": "super.street.hawk.shhh",
+    "users": {
+        "admin" : "admin"
+    },
+    "secret": "D@eplink#$%",
     "shortDomain": "http://localhost:3000/api/v1/shorten",
-    "uniqueShortUrls": true
+    "uniqueShortUrls": true,
+    "authorizeAPIRequests": true
 }

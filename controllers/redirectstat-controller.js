@@ -5,7 +5,6 @@
 
 // Dependencies
 var restful = require('node-restful');
-var bodyParser = require('body-parser');
 var handler = require('../handlers/redirectstat-handler');
 
 // builds up all the CRUD operations using the RedirectStats model

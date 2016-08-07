@@ -18,6 +18,7 @@ mongoose.connect(config.getDbConnectionString()); // initiate connection to mong
 // setup express app routes for CORS
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 // CORS support - Cross Origin Resource Support for REST APIs
@@ -38,8 +39,8 @@ app.all('/*', function(req, res, next) {
 // Only the requests that start with /api/v1/* will be checked for the token.
 // Any URL's that do not follow the below pattern should be avoided unless 
 // authentication is not needed
-//app.all('/api/v1/*', [require('./middlewares/validateRequest')]);
-//app.use('/', require('./routes'));
+app.all('/api/v1/*', [require('./middlewares/api-authorizer')]);
+//app.use('/admin', require('./middlewares/admin-validator'));
 
 // If no route is matched, it must be a 404
 var setupInvalidRoute = function() {

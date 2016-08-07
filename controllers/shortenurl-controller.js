@@ -6,14 +6,10 @@
 
 
 // Dependencies
-var bodyParser = require('body-parser');
 var handler = require('../handlers/shortenurl-handler');
 
 
 module.exports = function(app, route) {
-    
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
     
     // get all shortenUrl
     //var path = route + '/shorten';
